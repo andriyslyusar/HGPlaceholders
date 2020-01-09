@@ -108,6 +108,13 @@ open class TableView: UITableView {
      * The default value is false
      */
     open var placeholdersAlwaysBounceVertical = false
+
+
+    /**
+     * A Boolean value the determines whether display no result placeholder for empty list
+     * The default value is true
+     */
+    open var showNoResultsPlaceholderByDefault = true
     
     // MARK: - Private properties
     
@@ -229,8 +236,14 @@ open class TableView: UITableView {
     
     /**
      Reloads the rows and sections of the table view.
+     If the number of rows == 0 and showNoResultsPlaceholderByDefault is true it shows no results placeholder
      */
     open override func reloadData() {
+        // if the tableview is empty we switch automatically to no data placeholder
+        if numberOfRowsInAllSections() == 0 && showNoResultsPlaceholderByDefault {
+            showNoResultsPlaceholder()
+            return
+        }
         // if the data source is in no data placeholder, and the user tries to reload data, we will switch automatically to default
         if dataSource is PlaceholderDataSourceDelegate {
             showDefault()
